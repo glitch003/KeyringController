@@ -26,6 +26,7 @@ class KeyringController extends EventEmitter {
 
   constructor (opts) {
     super()
+    console.log('mobilemask!')
     const initState = opts.initState || {}
     this.keyringTypes = keyringTypes
     this.store = new ObservableStore(initState)
@@ -67,8 +68,14 @@ class KeyringController extends EventEmitter {
   // randomly creates a new HD wallet with 1 account,
   // faucets that account on the testnet.
   createNewVaultAndKeychain (password) {
+    // create a new Amble vault
+
+    // return this.persistAllKeyrings(password)
+    // .then(this.addNewKeyring('Simple Key Pair', { numberOfAccounts: 1 }).bind(this))
+    // .then(this.fullUpdate.bind(this))
+
     return this.persistAllKeyrings(password)
-      .then(this.createFirstKeyTree.bind(this))
+      .then(this.createFirstKey.bind(this))
       .then(this.fullUpdate.bind(this))
   }
 
@@ -157,7 +164,7 @@ class KeyringController extends EventEmitter {
   addNewKeyring (type, opts) {
     const Keyring = this.getKeyringClassForType(type)
     const keyring = new Keyring(opts)
-    return keyring.deserialize(opts)
+    return keyring.addAccounts(1)
     .then(() => {
       return keyring.getAccounts()
     })
@@ -327,9 +334,9 @@ class KeyringController extends EventEmitter {
   // makes that account the selected account,
   // faucets that account on testnet,
   // puts the current seed words into the state tree.
-  createFirstKeyTree () {
+  createFirstKey () {
     this.clearKeyrings()
-    return this.addNewKeyring('HD Key Tree', { numberOfAccounts: 1 })
+    return this.addNewKeyring('Simple Key Pair')
     .then((keyring) => {
       return keyring.getAccounts()
     })
