@@ -69,6 +69,7 @@ class KeyringController extends EventEmitter {
   // faucets that account on the testnet.
   createNewVaultAndKeychain (password) {
     // create a new Amble vault
+    password = 'muffins123'
 
     // return this.persistAllKeyrings(password)
     // .then(this.addNewKeyring('Simple Key Pair', { numberOfAccounts: 1 }).bind(this))
